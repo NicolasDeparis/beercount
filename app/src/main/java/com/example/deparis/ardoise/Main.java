@@ -57,12 +57,9 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
 
     private List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
 
- //   DrinkDatabase db = DrinkDatabase.getDrinkDatabase(Main.this );
+    DrinkDatabase database  = DrinkDatabase.getDrinkDatabase(Main.this);
 
-//    private List<DrinkItem> drinkList  = db.drinkDAO().getAll();
-
-    public static ArrayList<DrinkItem> drinkList = new ArrayList<DrinkItem>();
-
+    public static List<DrinkItem> drinkList = new ArrayList<DrinkItem>();
 
     public static FloatingActionMenu materialDesignFAM;
     private FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3;
@@ -100,22 +97,6 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
         return happy;
     }
 
-    private static DrinkItem addDrink(final DrinkDatabase db, DrinkItem drink) {
-        db.drinkDAO().insert(drink);
-        return drink;
-    }
-
-    private static void populateWithTestData(DrinkDatabase db) {
-        DrinkItem drink = new DrinkItem();
-        drink.setName("Tigre");
-        //drink.setHour("12h12");
-        drink.setPrice(12);
-        addDrink(db, drink);
-    }
-
-    //public SwitchPreference paramsex = findViewById(R.id.paramsex);
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,8 +128,6 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-//                String output = String.format("Item # %d clicked", position);
-//                Toast.makeText(getApplicationContext(),output, Toast.LENGTH_LONG).show();
 
                 final HashMap<String, String> item = (HashMap<String, String>) parent.getItemAtPosition(position);
 
@@ -161,8 +140,13 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
                     }
                 });
 
+
                 totalPrice -= drinkList.get(position).getPrice();
+                if (totalPrice < 0) totalPrice=0;
+
                 result.setText(String.format(java.util.Locale.US,"%.2f €", totalPrice));
+
+                database.drinkDAO().delete(drinkList.get(position));
                 drinkList.remove(position);
 
                 return true;
@@ -170,7 +154,8 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
 
         });
 
-
+        // refresh list
+        ((SimpleAdapter) listview.getAdapter()).notifyDataSetChanged();
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
@@ -202,14 +187,26 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(android.R.drawable.arrow_down_float);
 
-
-        get_happy();
-
         // Set automatic color changing for the FAM
         Intent activate = new Intent(Main.this, Alarm.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(Main.this, 0, activate, 0);
         AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),1000, alarmIntent);
+
+        // init
+
+        get_happy();
+
+        drinkList = database.drinkDAO().getAll();
+        for(int i = 0; i < drinkList.size(); i++){
+            HashMap<String, String> element = new HashMap<String, String>();
+            DrinkItem drink = drinkList.get(i);
+            element.put("biere", drink.getName());
+            element.put("heure", drink.getFormattedDrinkTime());
+            liste.add(element);
+        }
+
+        setAlcoolemieResult();
     }
 
 
@@ -272,11 +269,10 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
 
         drink.setVolume(500);
 
-        //drink = addDrink(db, drink);
-
         totalPrice += drink.getPrice();
         result.setText(String.format(java.util.Locale.US,"%.2f €", totalPrice ));
 
+        database.drinkDAO().insert(drink);
         drinkList.add(drink);
 
         // Add a list element

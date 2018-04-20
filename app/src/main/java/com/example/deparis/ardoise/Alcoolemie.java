@@ -2,13 +2,14 @@ package com.example.deparis.ardoise;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class Alcoolemie {
 
     // buveur
     Drinker drinker=new Drinker(92,true);
 
-    double get(ArrayList<DrinkItem> drinkList){
+    double get(List<DrinkItem> drinkList){
         double A=0;
 
         for(int i = 0; i < drinkList.size(); i++){
