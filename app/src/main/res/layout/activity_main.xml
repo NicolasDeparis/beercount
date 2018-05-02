@@ -26,167 +26,173 @@
             android:layout_height="fill_parent"
             android:id="@+id/background">
 
-            <ListView
-                android:id="@+id/list_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                        <ListView
+                            android:id="@+id/list_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"/>
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                >
-                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <android.support.v7.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/recyclerView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"/>
+
+                        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            >
+                            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                android:layout_width="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_height="55dp"
+
+                                android:id="@+id/alcoolemie"
+                                >
+
+                                <TextView
+                                    android:id="@+id/alcoolemieResult"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:text="0.00"
+                                    android:textSize="40dp"
+                                    android:textColor="@android:color/holo_red_light"
+                                    />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginVertical="10dp"
+                                    android:text="g/L"
+                                    android:textSize="15dp"
+                                    android:layout_toRightOf="@+id/alcoolemieResult"
+                                    />
+                            </RelativeLayout>
+
+                            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/alcoolemie"
+                                >
+
+                                <TextView
+                                    android:id="@+id/tot"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:text="Total : " />
+
+                                <TextView
+                                    android:id="@+id/result"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@+id/tot"
+                                    android:layout_alignParentBottom="true"
+                                    android:text="0 €"/>
+
+                            </RelativeLayout>
+
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:fab="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/list"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <com.github.clans.fab.FloatingActionMenu
+                                android:id="@+id/material_design_android_floating_action_menu"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginBottom="11dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                fab:menu_animationDelayPerItem="55"
+                                fab:menu_backgroundColor="@android:color/transparent"
+                                fab:menu_buttonSpacing="5dp"
+                                fab:menu_colorNormal="#ff0000"
+                                fab:menu_colorPressed="#ff0000"
+                                fab:menu_colorRipple="#ff0000"
+                                fab:menu_fab_label=""
+                                fab:menu_fab_size="normal"
+                                fab:menu_icon="@drawable/fab_add"
+                                fab:menu_labels_colorNormal="#333"
+                                fab:menu_labels_colorPressed="#444"
+                                fab:menu_labels_colorRipple="#66efecec"
+                                fab:menu_labels_cornerRadius="3dp"
+                                fab:menu_labels_ellipsize="none"
+                                fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+                                fab:menu_labels_margin="0dp"
+                                fab:menu_labels_maxLines="-1"
+                                fab:menu_labels_padding="8dp"
+                                fab:menu_labels_position="left"
+                                fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+                                fab:menu_labels_showShadow="true"
+                                fab:menu_labels_singleLine="false"
+                                fab:menu_labels_textColor="#f2f1f1"
+                                fab:menu_labels_textSize="15sp"
+                                fab:menu_openDirection="up"
+                                fab:menu_shadowColor="#757575"
+                                fab:menu_shadowRadius="4dp"
+                                fab:menu_shadowXOffset="1dp"
+                                fab:menu_shadowYOffset="4dp"
+                                fab:menu_showShadow="true">
+
+                                <com.github.clans.fab.FloatingActionButton
+                                    android:id="@+id/material_design_floating_action_menu_item_tigre"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/index"
+                                    fab:fab_label="Tigre"
+                                    fab:fab_colorNormal="@android:color/transparent"
+                                    fab:fab_colorPressed="@android:color/transparent"
+                                    fab:fab_colorRipple="@android:color/transparent"
+                                    app:fab_shadowColor="@android:color/transparent"
+                                    fab:fab_size="normal" />
+
+                                <com.github.clans.fab.FloatingActionButton
+                                    android:id="@+id/material_design_floating_action_menu_item_vedett"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/index"
+                                    android:dither="false"
+                                    fab:fab_label="Vedett IPA"
+                                    fab:fab_colorNormal="@android:color/transparent"
+                                    fab:fab_colorPressed="@android:color/transparent"
+                                    fab:fab_colorRipple="@android:color/transparent"
+                                    app:fab_shadowColor="@android:color/transparent"
+                                    fab:fab_size="normal"/>
+
+                                <com.github.clans.fab.FloatingActionButton
+                                    android:id="@+id/material_design_floating_action_menu_item_karmeliet"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/index"
+                                    fab:fab_label="Karmeliet"
+                                    fab:fab_colorNormal="@android:color/transparent"
+                                    fab:fab_colorPressed="@android:color/transparent"
+                                    fab:fab_colorRipple="@android:color/transparent"
+                                    app:fab_shadowColor="@android:color/transparent"
+                                    fab:fab_size="normal" />
+
+                            </com.github.clans.fab.FloatingActionMenu>
+                        </RelativeLayout>
+                    </FrameLayout>
+                    </LinearLayout>
+
+                <android.support.design.widget.NavigationView
+                    android:id="@+id/nav_view"
                     android:layout_width="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_height="55dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:fitsSystemWindows="true"
+                    app:menu="@menu/drawer_view"
+                    app:headerLayout="@layout/nav_header"/>
 
-                    android:id="@+id/alcoolemie"
-                    >
-
-                    <TextView
-                        android:id="@+id/alcoolemieResult"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:text="0.00"
-                        android:textSize="40dp"
-                        android:textColor="@android:color/holo_red_light"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginVertical="10dp"
-                        android:text="g/L"
-                        android:textSize="15dp"
-                        android:layout_toRightOf="@+id/alcoolemieResult"
-                        />
-                </RelativeLayout>
-
-                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/alcoolemie"
-                    >
-
-                    <TextView
-                        android:id="@+id/tot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:text="Total : " />
-
-                    <TextView
-                        android:id="@+id/result"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/tot"
-                        android:layout_alignParentBottom="true"
-                        android:text="0 €"/>
-
-                </RelativeLayout>
-
-
-
-            </RelativeLayout>
-
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:fab="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.github.clans.fab.FloatingActionMenu
-                    android:id="@+id/material_design_android_floating_action_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="11dp"
-                    android:layout_marginLeft="11dp"
-                    android:layout_marginRight="11dp"
-                    fab:menu_animationDelayPerItem="55"
-                    fab:menu_backgroundColor="@android:color/transparent"
-                    fab:menu_buttonSpacing="5dp"
-                    fab:menu_colorNormal="#ff0000"
-                    fab:menu_colorPressed="#ff0000"
-                    fab:menu_colorRipple="#ff0000"
-                    fab:menu_fab_label=""
-                    fab:menu_fab_size="normal"
-                    fab:menu_icon="@drawable/fab_add"
-                    fab:menu_labels_colorNormal="#333"
-                    fab:menu_labels_colorPressed="#444"
-                    fab:menu_labels_colorRipple="#66efecec"
-                    fab:menu_labels_cornerRadius="3dp"
-                    fab:menu_labels_ellipsize="none"
-                    fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
-                    fab:menu_labels_margin="0dp"
-                    fab:menu_labels_maxLines="-1"
-                    fab:menu_labels_padding="8dp"
-                    fab:menu_labels_position="left"
-                    fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
-                    fab:menu_labels_showShadow="true"
-                    fab:menu_labels_singleLine="false"
-                    fab:menu_labels_textColor="#f2f1f1"
-                    fab:menu_labels_textSize="15sp"
-                    fab:menu_openDirection="up"
-                    fab:menu_shadowColor="#757575"
-                    fab:menu_shadowRadius="4dp"
-                    fab:menu_shadowXOffset="1dp"
-                    fab:menu_shadowYOffset="4dp"
-                    fab:menu_showShadow="true">
-
-                    <com.github.clans.fab.FloatingActionButton
-                        android:id="@+id/material_design_floating_action_menu_item_tigre"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/index"
-                        fab:fab_label="Tigre"
-                        fab:fab_colorNormal="@android:color/transparent"
-                        fab:fab_colorPressed="@android:color/transparent"
-                        fab:fab_colorRipple="@android:color/transparent"
-                        app:fab_shadowColor="@android:color/transparent"
-                        fab:fab_size="normal" />
-
-                    <com.github.clans.fab.FloatingActionButton
-                        android:id="@+id/material_design_floating_action_menu_item_vedett"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/index"
-                        android:dither="false"
-                        fab:fab_label="Vedett IPA"
-                        fab:fab_colorNormal="@android:color/transparent"
-                        fab:fab_colorPressed="@android:color/transparent"
-                        fab:fab_colorRipple="@android:color/transparent"
-                        app:fab_shadowColor="@android:color/transparent"
-                        fab:fab_size="normal"/>
-
-                    <com.github.clans.fab.FloatingActionButton
-                        android:id="@+id/material_design_floating_action_menu_item_karmeliet"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/index"
-                        fab:fab_label="Karmeliet"
-                        fab:fab_colorNormal="@android:color/transparent"
-                        fab:fab_colorPressed="@android:color/transparent"
-                        fab:fab_colorRipple="@android:color/transparent"
-                        app:fab_shadowColor="@android:color/transparent"
-                        fab:fab_size="normal" />
-
-                </com.github.clans.fab.FloatingActionMenu>
-            </RelativeLayout>
-        </FrameLayout>
-        </LinearLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header"/>
-
-</android.support.v4.widget.DrawerLayout>
+            </android.support.v4.widget.DrawerLayout>

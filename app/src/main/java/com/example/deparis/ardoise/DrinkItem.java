@@ -34,10 +34,6 @@ public class DrinkItem {
     private long timeInMillis;
 
 
-
-
-
-
     public int getUid(){
         return uid;
     }

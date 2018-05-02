@@ -17,11 +17,17 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.SwitchPreference;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,14 +54,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class Main extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
+public class Main extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private double totalPrice=0;
     public static TextView result = null;
     public static TextView alcoolemieResult = null;
     private ListView listview = null;
 
-    private List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
+    private RecyclerView recyclerView;
+    private MyAdapter adapter;
 
     DrinkDatabase database  = DrinkDatabase.getDrinkDatabase(Main.this);
 
@@ -104,7 +111,27 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
 
         result = findViewById(R.id.result);
         alcoolemieResult=findViewById(R.id.alcoolemieResult);
+
         listview = findViewById(R.id.list_view);
+
+        drinkList = database.drinkDAO().getAll();
+
+        adapter=new MyAdapter(drinkList);
+
+        recyclerView =findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(adapter);
+
+        // adding item touch helper
+        // only ItemTouchHelper.LEFT added to detect Right to Left swipe
+        // if you want both Right -> Left and Left -> Right
+        // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
+
 
         materialDesignFAM = findViewById(R.id.material_design_android_floating_action_menu);
         floatingActionButton1 = findViewById(R.id.material_design_floating_action_menu_item_tigre);
@@ -114,48 +141,7 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
         floatingActionButton3 = findViewById(R.id.material_design_floating_action_menu_item_karmeliet);
         floatingActionButton3.setOnClickListener(this);
 
-        ListAdapter adapter = new SimpleAdapter(this,
-                liste,
-                android.R.layout.simple_list_item_2,
-                new String[]{"biere", "heure"},
-                new int[]{android.R.id.text1, android.R.id.text2});
 
-        listview.setAdapter(adapter);
-        listview.setLongClickable(true);
-
-        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-
-                final HashMap<String, String> item = (HashMap<String, String>) parent.getItemAtPosition(position);
-
-                view.animate().setDuration(500).alpha(0).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        liste.remove(item);
-                        ((SimpleAdapter) listview.getAdapter()).notifyDataSetChanged();
-                        view.setAlpha(1);
-                    }
-                });
-
-
-                totalPrice -= drinkList.get(position).getPrice();
-                if (totalPrice < 0) totalPrice=0;
-
-                result.setText(String.format(java.util.Locale.US,"%.2f €", totalPrice));
-
-                database.drinkDAO().delete(drinkList.get(position));
-                drinkList.remove(position);
-
-                return true;
-            }
-
-        });
-
-        // refresh list
-        ((SimpleAdapter) listview.getAdapter()).notifyDataSetChanged();
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
@@ -196,21 +182,39 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
         // init
 
         get_happy();
-
-        drinkList = database.drinkDAO().getAll();
-        for(int i = 0; i < drinkList.size(); i++){
-            HashMap<String, String> element = new HashMap<String, String>();
-            DrinkItem drink = drinkList.get(i);
-            element.put("biere", drink.getName());
-            element.put("heure", drink.getFormattedDrinkTime());
-            liste.add(element);
-        }
-
         setAlcoolemieResult();
     }
 
 
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof MyViewHolder) {
+            // get the removed item name to display it in snack bar
+            String name = drinkList.get(viewHolder.getAdapterPosition()).getName();
 
+            // backup of removed item for undo purpose
+            final DrinkItem deletedItem = drinkList.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+
+            adapter.removeItem(database,viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(mDrawerLayout, name + " removed from cart!", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // undo is selected, restore the deleted item
+                    adapter.restoreItem(deletedItem, deletedIndex);
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+
+            snackbar.show();
+        }
+    }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,14 +279,8 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
         database.drinkDAO().insert(drink);
         drinkList.add(drink);
 
-        // Add a list element
-        HashMap<String, String> element = new HashMap<String, String>();
-        element.put("biere", drink.getName());
-        element.put("heure", drink.getFormattedDrinkTime());
-        liste.add(element);
-
         // refresh list
-        ((SimpleAdapter) listview.getAdapter()).notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
 
         // Close the FAM
         materialDesignFAM.close(true);
