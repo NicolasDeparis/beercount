@@ -64,7 +64,8 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
     private RecyclerView recyclerView;
     private MyAdapter adapter;
 
-    DrinkDatabase database  = DrinkDatabase.getDrinkDatabase(Main.this);
+    DrinkDatabase drinkDB  = DrinkDatabase.getDrinkDatabase(Main.this);
+    ConsoDatabase consoDB  = ConsoDatabase.getConsoDatabase(Main.this);
 
     public static List<DrinkItem> drinkList = new ArrayList<DrinkItem>();
 
@@ -114,7 +115,7 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
 
         listview = findViewById(R.id.list_view);
 
-        drinkList = database.drinkDAO().getAll();
+        drinkList = drinkDB.drinkDAO().getAll();
 
         adapter=new MyAdapter(drinkList);
 
@@ -197,7 +198,7 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
             final int deletedIndex = viewHolder.getAdapterPosition();
 
 
-            adapter.removeItem(database,viewHolder.getAdapterPosition());
+            adapter.removeItem(drinkDB,viewHolder.getAdapterPosition());
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
@@ -276,7 +277,7 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
         totalPrice += drink.getPrice();
         result.setText(String.format(java.util.Locale.US,"%.2f €", totalPrice ));
 
-        database.drinkDAO().insert(drink);
+        drinkDB.drinkDAO().insert(drink);
         drinkList.add(drink);
 
         // refresh list
@@ -296,6 +297,5 @@ public class Main extends AppCompatActivity implements View.OnTouchListener, Vie
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 }

@@ -6,23 +6,11 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.util.Calendar;
 
-@Entity(tableName = "drinks")
-public class DrinkItem {
+@Entity(tableName = "conso")
+public class ConsoItem {
 
     @PrimaryKey(autoGenerate = true)
     private int uid;
-
-
-    @ColumnInfo(name = "hour")
-    private int hour;
-
-    @ColumnInfo(name = "minute")
-    private int minute;
-
-    @ColumnInfo(name = "timeInMillis")
-    private long timeInMillis;
-
-
 
     @ColumnInfo(name = "name")
     private String name;
@@ -37,47 +25,13 @@ public class DrinkItem {
     private double alcohol;
 
 
+
     public int getUid(){
         return uid;
     }
     public void setUid(int uid){
         this.uid = uid;
     }
-
-
-
-    public long getTimeInMillis(){
-        return timeInMillis;
-    }
-    public void setTimeInMillis(long timeInMillis){
-        this.timeInMillis = timeInMillis;
-    }
-
-    public int getHour(){
-        return hour;
-    }
-    public void setHour(int hour){
-        this.hour = hour;
-    }
-
-    public int getMinute(){
-        return minute;
-    }
-    public void setMinute(int minute){
-        this.minute= minute;
-    }
-
-    public void setDrinkTime(Calendar drinkCal){
-        hour = drinkCal.getTime().getHours();
-        minute = drinkCal.getTime().getMinutes();
-        timeInMillis = drinkCal.getTimeInMillis();
-    }
-    public String getFormattedDrinkTime(){
-        return String.format("%02dh%02d", hour, minute);
-    }
-
-
-
 
     public String getName(){
         return name;
@@ -106,7 +60,5 @@ public class DrinkItem {
     public void setAlcohol(double alcohol){
         this.alcohol = alcohol;
     }
-
-
 
 }
